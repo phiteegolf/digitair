@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thomas Jung | UI Art Director</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#0a0a0b; --bg2:#111113; --bg3:#191921; --surface:#1c1c24;
+  --border:rgba(255,255,255,0.07); --border-hi:rgba(255,255,255,0.14);
+  --text:#f0ede8; --muted:#7a7880;
+  --accent:#b8ff3e; --accent2:#3eb8ff; --accent3:#ff6b3e;
+  --fd:'Bebas Neue',sans-serif; --fb:'DM Sans',sans-serif; --fm:'DM Mono',monospace;
+}
+html { scroll-behavior:smooth; }
+body { font-family:var(--fb); background:var(--bg); color:var(--text); line-height:1.6; overflow-x:hidden; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 clamp(1.5rem,5vw,4rem); height:64px;
+  background:rgba(10,10,11,0.88); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { font-family:var(--fm); font-size:15px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); text-decoration:none; }
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a { font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color .2s; }
+.nav-links a:hover { color:var(--text); }
+.nav-cta { font-size:14px; letter-spacing:0.08em; text-transform:uppercase; padding:8px 20px; border:1px solid var(--accent); color:var(--accent); text-decoration:none; font-family:var(--fm); transition:background .2s,color .2s; }
+.nav-cta:hover { background:var(--accent); color:#0a0a0b; }
+.nav-hamburger { display:none; background:none; border:none; cursor:pointer; color:var(--text); font-size:22px; padding:4px; }
+
+/* HERO */
+.hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:80px clamp(1.5rem,5vw,4rem) 60px; gap:4rem; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 50% at 70% 50%,rgba(62,184,255,.06) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 20% 80%,rgba(184,255,62,.04) 0%,transparent 60%); pointer-events:none; }
+.hero-eyebrow { font-family:var(--fm); font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; display:flex; align-items:center; gap:12px; }
+.hero-eyebrow::before { content:''; display:block; width:40px; height:1px; background:var(--accent); }
+.hero-title { font-family:var(--fd); font-size:clamp(4rem,8vw,8rem); line-height:.9; letter-spacing:.01em; margin-bottom:1.5rem; }
+.hero-title .accent { color:var(--accent); }
+.hero-sub { font-size:clamp(1rem,1.5vw,1.1rem); color:var(--muted); max-width:460px; margin-bottom:2.5rem; font-weight:300; }
+.hero-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:2.5rem; }
+.tag { font-family:var(--fm); font-size:12px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 12px; border:1px solid var(--border-hi); color:var(--muted); }
+.hero-actions { display:flex; gap:1rem; flex-wrap:wrap; }
+.btn-primary { display:inline-block; padding:14px 32px; background:var(--accent); color:#0a0a0b; text-decoration:none; font-family:var(--fm); font-size:14px; letter-spacing:0.12em; text-transform:uppercase; font-weight:500; transition:opacity .2s,transform .2s; }
+.btn-primary:hover { opacity:.85; transform:translateY(-1px); }
+.btn-ghost { display:inline-block; padding:14px 32px; border:1px solid var(--border-hi); color:var(--text); text-decoration:none; font-family:var(--fm); font-size:14px; letter-spacing:0.12em; text-transform:uppercase; transition:border-color .2s,background .2s; }
+.btn-ghost:hover { border-color:var(--text); background:rgba(255,255,255,.04); }
+.hero-visual { position:relative; display:flex; align-items:center; justify-content:center; }
+.hero-img-wrap { position:relative; width:100%; max-width:560px; }
+.hero-img-badge { position:absolute; bottom:-16px; right:-16px; background:var(--bg3); border:1px solid var(--border-hi); padding:16px 20px; font-family:var(--fm); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); line-height:1.8; }
+.hero-img-badge strong { color:var(--accent); display:block; font-size:22px; letter-spacing:0; font-family:var(--fd); }
+
+/* STATS */
+.stats-bar { border-top:1px solid var(--border); border-bottom:1px solid var(--border); display:grid; grid-template-columns:repeat(4,1fr); background:var(--bg2); }
+.stat { padding:2rem clamp(1.5rem,3vw,3rem); border-right:1px solid var(--border); display:flex; flex-direction:column; gap:4px; }
+.stat:last-child { border-right:none; }
+.stat-num { font-family:var(--fd); font-size:clamp(2rem,3vw,3rem); color:var(--text); line-height:1; }
+.stat-label { font-family:var(--fm); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+
+/* SECTION */
+section { padding:5rem clamp(1.5rem,5vw,4rem); }
+.section-label { font-family:var(--fm); font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; display:flex; align-items:center; gap:10px; }
+.section-label::before { content:''; display:block; width:24px; height:1px; background:var(--accent); }
+.section-title { font-family:var(--fd); font-size:clamp(2.5rem,5vw,5rem); line-height:.9; color:var(--text); margin-bottom:2.5rem; }
+.section-header { display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:2.5rem; }
+
+/* ── PORTFOLIO CARD ── */
+.portfolio-card {
+  border:1px solid var(--border);
+  background:var(--bg2);
+  margin-bottom:1px;
+}
+.portfolio-card-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.25rem 1.5rem;
+  cursor:pointer;
+  user-select:none;
+  transition:background .2s;
+}
+.portfolio-card-header:hover { background:var(--bg3); }
+.portfolio-card-meta { display:flex; flex-direction:column; gap:3px; }
+.portfolio-card-cat { font-family:var(--fm); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); }
+.portfolio-card-title { font-family:var(--fd); font-size:clamp(1.2rem,2.5vw,2rem); color:var(--text); line-height:1; }
+.portfolio-card-toggle { font-family:var(--fm); font-size:20px; color:var(--muted); transition:transform .3s; }
+.portfolio-card.open .portfolio-card-toggle { transform:rotate(45deg); }
+.portfolio-card-body { display:none; border-top:1px solid var(--border); }
+.portfolio-card.open .portfolio-card-body { display:block; }
+.portfolio-card-desc { padding:1rem 1.5rem 0; font-size:15px; color:var(--muted); line-height:1.7; max-width:700px; }
+
+/* ── SCROLL GALLERY ── */
+.gallery-scroll {
+  display:flex; gap:12px; overflow-x:auto; padding:1.25rem 1.5rem 1.5rem;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border-hi) transparent;
+}
+.gallery-scroll::-webkit-scrollbar { height:4px; }
+.gallery-scroll::-webkit-scrollbar-track { background:transparent; }
+.gallery-scroll::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+
+.gallery-img {
+  flex-shrink:0; scroll-snap-align:start;
+  height:280px; width:auto; max-width:480px;
+  object-fit:cover; display:block;
+  border:1px solid var(--border);
+  transition:filter .3s;
+}
+.gallery-img:hover { filter:brightness(1.1) saturate(1.1); }
+
+/* VIDEO THUMBNAILS */
+.video-grid {
+  display:flex; gap:12px; overflow-x:auto; padding:1.25rem 1.5rem 1.5rem;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin; scrollbar-color:var(--border-hi) transparent;
+}
+.video-grid::-webkit-scrollbar { height:4px; }
+.video-grid::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+
+.video-thumb {
+  flex-shrink:0; scroll-snap-align:start;
+  width:320px; position:relative; cursor:pointer;
+  text-decoration:none; display:block;
+  border:1px solid var(--border);
+  transition:border-color .2s, transform .2s;
+}
+.video-thumb:hover { border-color:var(--accent3); transform:translateY(-2px); }
+.video-thumb img { width:100%; height:180px; object-fit:cover; display:block; }
+.video-play-btn {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-60%);
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(255,107,62,.92);
+  display:flex; align-items:center; justify-content:center;
+  transition:background .2s, transform .2s;
+}
+.video-thumb:hover .video-play-btn { background:var(--accent3); transform:translate(-50%,-60%) scale(1.1); }
+.video-play-btn svg { margin-left:4px; }
+.video-thumb-label {
+  padding:8px 10px;
+  font-family:var(--fm); font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--muted); background:var(--bg2);
+  display:flex; align-items:center; gap:6px;
+}
+.video-thumb-label::before { content:'▶'; color:var(--accent3); font-size:9px; }
+
+/* GAME COVERS GRID */
+.covers-row {
+  display:flex; gap:10px; overflow-x:auto; padding:1.25rem 1.5rem 1.5rem;
+  scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin; scrollbar-color:var(--border-hi) transparent;
+}
+.covers-row::-webkit-scrollbar { height:4px; }
+.covers-row::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+.cover-item {
+  flex-shrink:0; scroll-snap-align:start;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  cursor:default;
+}
+.cover-item img {
+  height:130px; width:auto; display:block;
+  border:1px solid var(--border);
+  transition:border-color .2s, transform .2s;
+}
+.cover-item:hover img { border-color:var(--accent3); transform:translateY(-2px); }
+.cover-label { font-family:var(--fm); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); text-align:center; }
+
+/* CAPABILITIES */
+.capabilities-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
+.cap-card { background:var(--bg); padding:clamp(1.5rem,2.5vw,2.5rem); transition:background .2s; }
+.cap-card:hover { background:var(--bg2); }
+.cap-num { font-family:var(--fd); font-size:3rem; color:var(--border-hi); line-height:1; margin-bottom:1rem; }
+.cap-title { font-size:16px; font-weight:500; color:var(--text); margin-bottom:.5rem; }
+.cap-desc { font-size:15px; color:var(--muted); line-height:1.7; }
+
+/* MARQUEE */
+.marquee-section { padding:2.5rem 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); overflow:hidden; background:var(--bg2); }
+.marquee-track { display:flex; gap:4rem; animation:marquee 22s linear infinite; white-space:nowrap; }
+.marquee-item { font-family:var(--fd); font-size:1.1rem; letter-spacing:0.08em; color:var(--border-hi); flex-shrink:0; }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ABOUT */
+.about-layout { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+.about-avatar { width:80px; height:80px; border-radius:50%; overflow:hidden; border:2px solid var(--border-hi); margin-bottom:1.5rem; }
+.about-avatar img { width:100%; height:100%; object-fit:cover; }
+.about-role { font-family:var(--fm); font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; }
+.about-bio { font-size:15px; color:var(--muted); line-height:1.8; font-weight:300; }
+.about-bio strong { color:var(--text); font-weight:400; }
+.about-credits { display:flex; flex-direction:column; gap:1rem; }
+.credit-item { display:flex; gap:1rem; padding:1rem 1.25rem; border:1px solid var(--border); background:var(--bg2); }
+.credit-co { font-family:var(--fm); font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent2); min-width:120px; flex-shrink:0; }
+.credit-role { font-size:14px; color:var(--text); }
+.credit-sub { font-size:14px; color:var(--muted); margin-top:2px; }
+.about-contact { margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:.75rem; }
+.contact-row { display:flex; align-items:center; gap:12px; font-family:var(--fm); font-size:14px; }
+.contact-row a { color:var(--text); text-decoration:none; }
+.contact-row a:hover { color:var(--accent); }
+.contact-label { font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); min-width:64px; }
+
+/* FOOTER */
+footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:end; }
+.footer-brand { font-family:var(--fd); font-size:4rem; line-height:.9; color:var(--text); }
+.footer-brand span { color:var(--accent); }
+.footer-tagline { font-size:13px; color:var(--muted); margin-top:.75rem; }
+.footer-copy { text-align:right; font-family:var(--fm); font-size:13px; color:var(--muted); letter-spacing:0.06em; line-height:1.8; }
+.footer-copy a { color:var(--muted); text-decoration:none; }
+.footer-copy a:hover { color:var(--accent); }
+
+/* MOBILE NAV */
+.mobile-nav { display:none; position:fixed; inset:0; z-index:99; background:rgba(10,10,11,.97); flex-direction:column; align-items:center; justify-content:center; gap:2rem; }
+.mobile-nav.open { display:flex; }
+.mobile-nav a { font-family:var(--fd); font-size:3rem; color:var(--text); text-decoration:none; letter-spacing:0.04em; transition:color .2s; }
+.mobile-nav a:hover { color:var(--accent); }
+.mobile-nav-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; color:var(--muted); cursor:pointer; font-size:28px; }
+
+/* REVEAL */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .6s ease,transform .6s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr;padding-top:96px;}
+  .hero-visual{display:none;}
+  .about-layout{grid-template-columns:1fr;}
+  .capabilities-grid{grid-template-columns:repeat(2,1fr);}
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+  .stat:nth-child(2){border-right:none;}
+  footer{grid-template-columns:1fr;gap:2rem;}
+  .footer-copy{text-align:left;}
+}
+@media(max-width:640px){
+  .nav-links,.nav-cta{display:none;}
+  .nav-hamburger{display:block;}
+  .capabilities-grid{grid-template-columns:1fr;}
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+  .gallery-img{height:200px;}
+  .video-thumb{width:260px;}
+  .video-thumb img{height:146px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Thomas Jung</a>
+  <ul class="nav-links">
+    <li><a href="#figma-ui">Figma UI</a></li>
+    <li><a href="#ps-mlb">PS MLB</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <a href="mailto:tom@phitee.com" class="nav-cta">Get in Touch</a>
+  <button class="nav-hamburger" id="hamburger">&#9776;</button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="navClose">&#10005;</button>
+  <a href="#figma-ui" onclick="closeMobileNav()">Figma UI</a>
+  <a href="#ps-mlb" onclick="closeMobileNav()">PS MLB</a>
+  <a href="#capabilities" onclick="closeMobileNav()">Capabilities</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="mailto:tom@phitee.com" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">UI-Centric Art Director</div>
+    <h1 class="hero-title">THOMAS<br><span class="accent">JUNG</span></h1>
+    <p class="hero-sub">14 shipped titles on PlayStation. Golf simulator UIs from Figma prototype to Unity 3D. Art direction where precision meets play.</p>
+    <div class="hero-tags">
+      <span class="tag">Figma UI / UX</span>
+      <span class="tag">Game UI</span>
+      <span class="tag">Illustration</span>
+      <span class="tag">Art Direction</span>
+      <span class="tag">Unity 3D</span>
+      <span class="tag">Logo &amp; Branding</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#figma-ui" class="btn-primary">View Work</a>
+      <a href="https://www.digitair.com/_files/ugd/a2afcf_f5949c2261e64f6d82c9f842d5d48bbd.pdf" target="_blank" class="btn-ghost">Download Résumé</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-img-wrap">
+      <svg viewBox="0 0 560 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;opacity:.06">
+        <defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="#b8ff3e" stroke-width=".6"/></pattern></defs>
+        <rect width="100%" height="100%" fill="url(#g)"/>
+      </svg>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,12vw,9rem);color:#b8ff3e;opacity:.12;line-height:.85;letter-spacing:.02em;text-align:center;">UI ART<br>DIRECTOR</div>
+      </div>
+      <div class="hero-img-badge"><strong>14</strong>Released Titles<br>Sony PlayStation</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat reveal"><span class="stat-num">14+</span><span class="stat-label">PS Titles Shipped</span></div>
+  <div class="stat reveal"><span class="stat-num">20+</span><span class="stat-label">Years Experience</span></div>
+  <div class="stat reveal"><span class="stat-num">3</span><span class="stat-label">Studios</span></div>
+  <div class="stat reveal"><span class="stat-num">100%</span><span class="stat-label">Shipped Product</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     FIGMA UI SECTION
+══════════════════════════════════════════════ -->
+<section id="figma-ui" style="background:var(--bg);">
+  <div class="section-label reveal">Figma UI / Interactive Prototype</div>
+  <h2 class="section-title reveal">FULL SWING GOLF</h2>
+
+  <!-- FSG Main UI -->
+  <div class="portfolio-card reveal open" id="card-fsg-main">
+    <div class="portfolio-card-header" onclick="toggleCard('card-fsg-main')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">Figma UI · Interactive Prototype</span>
+        <span class="portfolio-card-title">FSG Main UI Design</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <p class="portfolio-card-desc">Complete game UI system for Full Swing Golf Simulator — designed in Figma with advanced interactive prototyping, implemented in Unity 3D under direct art direction.</p>
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_789f411704f44f4c80d907d041940ae8f000.jpg/v1/fill/w_880,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_789f411704f44f4c80d907d041940ae8f000.jpg" alt="FSG Main UI Design" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- FSG InGame UI -->
+  <div class="portfolio-card reveal" id="card-fsg-ingame">
+    <div class="portfolio-card-header" onclick="toggleCard('card-fsg-ingame')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">Game UI · HUD</span>
+        <span class="portfolio-card-title">FSG InGame UI</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <p class="portfolio-card-desc">Real-time HUD and interactive game overlays for the Full Swing Golf simulator platform, designed in Figma and implemented in Unity 3D.</p>
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_7b6889f5537c48549841c98fabb06028f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7b6889f5537c48549841c98fabb06028f000.jpg" alt="FSG InGame UI" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- FSG Practice Range -->
+  <div class="portfolio-card reveal" id="card-fsg-practice">
+    <div class="portfolio-card-header" onclick="toggleCard('card-fsg-practice')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">Game UI · Practice Mode</span>
+        <span class="portfolio-card-title">FSG Practice Range UI</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <p class="portfolio-card-desc">Dedicated practice mode UI with advanced data visualization and drill-tracking interfaces.</p>
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1bf6bb16f9b9492a8b0ff21a9bad6d80f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1bf6bb16f9b9492a8b0ff21a9bad6d80f000.jpg" alt="FSG Practice Range UI" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- FSG CTP UI -->
+  <div class="portfolio-card reveal" id="card-fsg-ctp">
+    <div class="portfolio-card-header" onclick="toggleCard('card-fsg-ctp')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">Game UI · Close to the Pin Mode</span>
+        <span class="portfolio-card-title">FSG Close to the Pin UI</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <p class="portfolio-card-desc">Close to the Pin game mode UI — precision challenge interface with real-time shot data and scoring overlays.</p>
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_6fcdf39df2b14623b8108b5007b1a3c9f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_6fcdf39df2b14623b8108b5007b1a3c9f000.jpg" alt="FSG CTP UI" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Sony PlayStation</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Full Swing Golf</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Phi Tee Golf</span><span class="marquee-item">·</span>
+    <span class="marquee-item">MLB The Show</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Unity 3D</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Figma</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Game UI/UX</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Art Direction</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Sony PlayStation</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Full Swing Golf</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Phi Tee Golf</span><span class="marquee-item">·</span>
+    <span class="marquee-item">MLB The Show</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Unity 3D</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Figma</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Game UI/UX</span><span class="marquee-item">·</span>
+    <span class="marquee-item">Art Direction</span><span class="marquee-item">·</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PS MLB SECTION
+══════════════════════════════════════════════ -->
+<section id="ps-mlb" style="background:var(--bg2);">
+  <div class="section-label reveal">Sony PlayStation · Senior Lead UI Artist</div>
+  <h2 class="section-title reveal">MLB THE SHOW</h2>
+  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:720px;line-height:1.8;margin-bottom:2.5rem;font-weight:300;">
+    For the most part of 16 years at SCEA (Sony Computer Entertainment of America — PlayStation Division), Thomas worked as <strong style="color:var(--text);font-weight:400;">Senior Lead UI Artist (UI Art Director)</strong>. For the last 7 years of the MLB The Show franchise, he hired and managed 6 UI artists responsible for over 1,200 screens per year across PS3, PSVita, PSP, PS2, and Online platforms.
+  </p>
+
+  <!-- Game Covers -->
+  <div class="portfolio-card reveal open" id="card-covers">
+    <div class="portfolio-card-header" onclick="toggleCard('card-covers')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">Sony PlayStation · PS1 · PS2 · PS3 · PSVita</span>
+        <span class="portfolio-card-title">14 Released Game Covers</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <div class="covers-row">
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_9c1ced056df84559945bd07b01078b8d.jpg/v1/fill/w_115,h_163,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_9c1ced056df84559945bd07b01078b8d.jpg" alt="MLB 06 PS2">
+          <span class="cover-label">MLB 06 · PS2</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_7e24294f55a94d0d82f2921afd0ab231.jpg/v1/fill/w_115,h_165,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_7e24294f55a94d0d82f2921afd0ab231.jpg" alt="MLB 2006 PS2">
+          <span class="cover-label">MLB 2006 · PS2</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_4ac818346dc64a6ea7373e5f89b28ce5.jpg/v1/fill/w_115,h_163,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_4ac818346dc64a6ea7373e5f89b28ce5.jpg" alt="MLB 2005 PS2">
+          <span class="cover-label">MLB 2005 · PS2</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_ccf76739677b4df7b4aafbb5b26b7666.jpg/v1/fill/w_115,h_163,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_ccf76739677b4df7b4aafbb5b26b7666.jpg" alt="MLB 2004 PS2">
+          <span class="cover-label">MLB 2004 · PS2</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_4fd9f80e281a4b53ba454586afc35ef8.jpg/v1/fill/w_84,h_120,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_4fd9f80e281a4b53ba454586afc35ef8.jpg" alt="MLB 2003 PS2 Japan">
+          <span class="cover-label">MLB 2003 · PS2 Japan</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_16ab60616d6f427b9a1c49e2b63aa366.jpg/v1/fill/w_108,h_108,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_16ab60616d6f427b9a1c49e2b63aa366.jpg" alt="MLB 2003 PS1">
+          <span class="cover-label">MLB 2003 · PS1</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_071d59765baf43babe2cb701557c66ae.jpg/v1/fill/w_108,h_107,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_071d59765baf43babe2cb701557c66ae.jpg" alt="MLB 2002 PS1">
+          <span class="cover-label">MLB 2002 · PS1</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_1bc4af7fbb004fae803569c46a5aaccc.jpg/v1/fill/w_108,h_108,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_1bc4af7fbb004fae803569c46a5aaccc.jpg" alt="MLB 2001 PS1">
+          <span class="cover-label">MLB 2001 · PS1</span>
+        </div>
+        <div class="cover-item">
+          <img src="https://static.wixstatic.com/media/a2afcf_4fc9adbb8f9144f183714d003be3a151.jpg/v1/fill/w_108,h_107,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/a2afcf_4fc9adbb8f9144f183714d003be3a151.jpg" alt="MLB 2000 PS1">
+          <span class="cover-label">MLB 2000 · PS1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MLB 13 -->
+  <div class="portfolio-card reveal" id="card-mlb13">
+    <div class="portfolio-card-header" onclick="toggleCard('card-mlb13')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">PS3 · 2013 · UI Flow Videos</span>
+        <span class="portfolio-card-title">MLB 13 The Show</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <p class="portfolio-card-desc">UI flow screen captures and video footage of the menu and game graphics for MLB 13. Click any thumbnail to watch on YouTube.</p>
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg" alt="MLB 13 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg" alt="MLB 13 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg" alt="MLB 13 UI Screen 3" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg" alt="MLB 13 UI Screen 4" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+13+The+Show+PS3+menu+UI+flow" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg" alt="MLB 13 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · UI Flow · Watch on YouTube</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+13+The+Show+PS3+front+end+menu+2013" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg" alt="MLB 13 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · Front End Menu</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+13+The+Show+PS3+ingame+HUD+2013" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg" alt="MLB 13 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · InGame OSD</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+13+The+Show+PS3+gameplay+2013" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg" alt="MLB 13 Video 4">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · Gameplay UI</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MLB 12 -->
+  <div class="portfolio-card reveal" id="card-mlb12">
+    <div class="portfolio-card-header" onclick="toggleCard('card-mlb12')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">PS3 · 2012 · UI Flow Videos</span>
+        <span class="portfolio-card-title">MLB 12 The Show</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg" alt="MLB 12 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg" alt="MLB 12 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg" alt="MLB 12 UI Screen 3" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg" alt="MLB 12 UI Screen 4" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+12+The+Show+PS3+menu+UI" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg" alt="MLB 12 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · UI Flow</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+12+The+Show+PS3+front+end+2012" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg" alt="MLB 12 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · Front End</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+12+The+Show+PS3+ingame+2012" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg" alt="MLB 12 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · InGame OSD</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+12+The+Show+PS3+gameplay" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg" alt="MLB 12 Video 4">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · Gameplay UI</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MLB 11 -->
+  <div class="portfolio-card reveal" id="card-mlb11">
+    <div class="portfolio-card-header" onclick="toggleCard('card-mlb11')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">PS3 · 2011 · UI Flow Videos</span>
+        <span class="portfolio-card-title">MLB 11 The Show</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_65c06359e85849398ef2205fce815662f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_65c06359e85849398ef2205fce815662f000.jpg" alt="MLB 11 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg" alt="MLB 11 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg" alt="MLB 11 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+11+The+Show+PS3+menu+UI+2011" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_65c06359e85849398ef2205fce815662f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_65c06359e85849398ef2205fce815662f000.jpg" alt="MLB 11 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 11 · UI Flow</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+11+The+Show+PS3+ingame+2011" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg" alt="MLB 11 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 11 · InGame OSD</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+11+The+Show+PS3+gameplay" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg" alt="MLB 11 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 11 · Gameplay UI</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MLB 10 -->
+  <div class="portfolio-card reveal" id="card-mlb10">
+    <div class="portfolio-card-header" onclick="toggleCard('card-mlb10')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">PS3 · 2010 · UI Flow Videos</span>
+        <span class="portfolio-card-title">MLB 10 The Show</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg" alt="MLB 10 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg" alt="MLB 10 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg" alt="MLB 10 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+10+The+Show+PS3+menu+UI+2010" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg" alt="MLB 10 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 10 · UI Flow</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+10+The+Show+PS3+ingame+2010" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg" alt="MLB 10 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 10 · InGame OSD</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+10+The+Show+PS3+gameplay" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg" alt="MLB 10 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 10 · Gameplay UI</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MLB 09 -->
+  <div class="portfolio-card reveal" id="card-mlb09">
+    <div class="portfolio-card-header" onclick="toggleCard('card-mlb09')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">PS3 · 2009 · UI Flow Videos</span>
+        <span class="portfolio-card-title">MLB 09 The Show</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg" alt="MLB 09 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg" alt="MLB 09 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg" alt="MLB 09 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+09+The+Show+PS3+menu+UI+2009" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg" alt="MLB 09 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 09 · UI Flow</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+09+The+Show+PS3+ingame+2009" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg" alt="MLB 09 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 09 · InGame OSD</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+09+The+Show+PS3+gameplay" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg" alt="MLB 09 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 09 · Gameplay UI</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MLB 08 -->
+  <div class="portfolio-card reveal" id="card-mlb08">
+    <div class="portfolio-card-header" onclick="toggleCard('card-mlb08')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">PS3 · 2008 · UI Flow Videos</span>
+        <span class="portfolio-card-title">MLB 08 The Show</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg" alt="MLB 08 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg" alt="MLB 08 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg" alt="MLB 08 UI Screen 3" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg" alt="MLB 08 UI Screen 4" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+08+The+Show+PS3+menu+UI+2008" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg" alt="MLB 08 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · UI Flow</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+08+The+Show+PS3+ingame+2008" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg" alt="MLB 08 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · InGame OSD</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+08+The+Show+PS3+gameplay" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg" alt="MLB 08 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · Gameplay UI</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+08+The+Show+PS3+review+2008" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg" alt="MLB 08 Video 4">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · Full Review</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MLB 07 -->
+  <div class="portfolio-card reveal" id="card-mlb07">
+    <div class="portfolio-card-header" onclick="toggleCard('card-mlb07')">
+      <div class="portfolio-card-meta">
+        <span class="portfolio-card-cat">PS3 Launch Title · 2007 · UI Flow Videos</span>
+        <span class="portfolio-card-title">MLB 07 The Show</span>
+      </div>
+      <span class="portfolio-card-toggle">+</span>
+    </div>
+    <div class="portfolio-card-body">
+      <p class="portfolio-card-desc">PS3 was launched November 17, 2006 and MLB 07 was the first of the series to support the new platform — a landmark release for the franchise.</p>
+      <div class="gallery-scroll">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg" alt="MLB 07 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg" alt="MLB 07 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg" alt="MLB 07 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+07+The+Show+PS3+menu+UI+2007" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg" alt="MLB 07 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 07 · UI Flow · PS3 Launch</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+07+The+Show+PS3+ingame+2007" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg" alt="MLB 07 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 07 · InGame OSD</div>
+        </a>
+        <a class="video-thumb" href="https://www.youtube.com/results?search_query=MLB+07+The+Show+PS3+gameplay+review" target="_blank">
+          <img src="https://static.wixstatic.com/media/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg" alt="MLB 07 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 07 · Gameplay UI</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="capabilities" style="background:var(--bg);">
+  <div class="section-label reveal">What I Do</div>
+  <h2 class="section-title reveal">CAPABILITIES</h2>
+  <div class="capabilities-grid reveal">
+    <div class="cap-card"><div class="cap-num">01</div><div class="cap-title">Figma UI &amp; Prototyping</div><div class="cap-desc">Full UI design systems with advanced interactive prototyping — art element animations, screen transitions, and navigable flows. Prototype links available on request.</div></div>
+    <div class="cap-card"><div class="cap-num">02</div><div class="cap-title">Game UI / HUD Design</div><div class="cap-desc">Real-time game interfaces from main menus to in-game HUDs, scoreboards, and player dashboards, all under art direction for Unity 3D implementation.</div></div>
+    <div class="cap-card"><div class="cap-num">03</div><div class="cap-title">PlayStation UX/UI</div><div class="cap-desc">Senior lead on UI/UX for 14 shipped MLB The Show titles on Sony PlayStation. Deep expertise in console UI patterns, accessibility, and shipped product pipelines.</div></div>
+    <div class="cap-card"><div class="cap-num">04</div><div class="cap-title">Technical Illustration</div><div class="cap-desc">Medical device illustration, product cutaways, infographics, and concept-to-3D prototype visualization. Communication through precise, layered visual storytelling.</div></div>
+    <div class="cap-card"><div class="cap-num">05</div><div class="cap-title">Art Direction</div><div class="cap-desc">Studio and creative art direction with hands-on guidance of engineering teams. Ensuring visual fidelity from Figma concept through to final implementation.</div></div>
+    <div class="cap-card"><div class="cap-num">06</div><div class="cap-title">Brand &amp; Identity</div><div class="cap-desc">Logo design, corporate identity systems, business card design, brochures, and marketing collateral. Building cohesive visual languages from the ground up.</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background:var(--bg2);">
+  <div class="section-label reveal">The Person Behind It</div>
+  <h2 class="section-title reveal">THOMAS JUNG</h2>
+  <div class="about-layout reveal">
+    <div>
+      <div class="about-avatar">
+        <img src="https://static.wixstatic.com/media/a2afcf_35dc5ac235ac4ea9b94f6dd0b7d846c8~mv2.png/v1/fill/w_120,h_120,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_35dc5ac235ac4ea9b94f6dd0b7d846c8~mv2.png" alt="Thomas Jung" onerror="this.style.opacity=0">
+      </div>
+      <div class="about-role">UI-Centric Art Director · Art Manager · Senior UI Designer</div>
+      <p class="about-bio">
+        Thomas Jung is a <strong>UI-centric art director</strong> with a career defined by shipped product — 14 released titles on Sony PlayStation, full UI systems for golf simulators, and brand work across studios and agencies.
+        <br><br>
+        He bridges the gap between creative vision and technical execution: designing in Figma with advanced interactive prototyping, then guiding engineering teams through Unity 3D implementation with precision.
+        <br><br>
+        Currently <strong>Studio Art Director at Full Swing Golf</strong>, previously <strong>Creative/Art Director at Phi Tee Golf</strong>, and <strong>Senior Lead UI Artist at Sony PlayStation</strong> for the MLB The Show franchise.
+      </p>
+      <div class="about-contact">
+        <div class="contact-row"><span class="contact-label">Phone</span><a href="tel:8587752557">858.775.2557</a></div>
+        <div class="contact-row"><span class="contact-label">Email</span><a href="mailto:tom@phitee.com">tom@phitee.com</a></div>
+        <div class="contact-row"><span class="contact-label">Résumé</span><a href="https://www.digitair.com/_files/ugd/a2afcf_f5949c2261e64f6d82c9f842d5d48bbd.pdf" target="_blank">Download PDF ↗</a></div>
+      </div>
+    </div>
+    <div class="about-credits">
+      <div class="credit-item">
+        <div class="credit-co">Full Swing Golf</div>
+        <div><div class="credit-role">Studio Art Director</div><div class="credit-sub">Full UI design system, Figma prototyping, Unity 3D art direction</div></div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-co">Phi Tee Golf</div>
+        <div><div class="credit-role">Creative / Art Director</div><div class="credit-sub">Brand identity, UI/UX, product design</div></div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-co" style="color:var(--accent3)">Sony PlayStation</div>
+        <div><div class="credit-role">Senior Lead UI Artist</div><div class="credit-sub">MLB The Show · 14 Released Titles · 16 Years</div></div>
+      </div>
+      <div style="margin-top:1.5rem;padding:1.5rem;border:1px solid var(--border);background:var(--bg);">
+        <div style="font-family:var(--fm);font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;">All work protected</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;">All images and videos © Thomas Jung · All Rights Reserved. Figma interactive prototype links available upon request.</div>
+        <a href="mailto:tom@phitee.com" class="btn-primary" style="display:inline-block;margin-top:1.25rem;font-size:13px;padding:10px 24px;">Request Prototypes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">THOMAS <span>JUNG</span></div>
+    <div class="footer-tagline">UI-Centric Art Direction · Game UI · Illustration · Brand Design</div>
+  </div>
+  <div class="footer-copy">
+    © 2024 Thomas Jung · All Rights Reserved<br>
+    <a href="mailto:tom@phitee.com">tom@phitee.com</a> · <a href="tel:8587752557">858.775.2557</a>
+  </div>
+</footer>
+
+<script>
+  // Hamburger
+  document.getElementById('hamburger').onclick = () => document.getElementById('mobileNav').classList.add('open');
+  document.getElementById('navClose').onclick = closeMobileNav;
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+  // Accordion
+  function toggleCard(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
