@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tom Jung | UI Art Director</title>
+<title>Thomas Jung | UI Art Director</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
   --bg:#0a0a0b; --bg2:#111113; --bg3:#191921; --surface:#1c1c24;
   --border:rgba(255,255,255,0.07); --border-hi:rgba(255,255,255,0.14);
   --text:#f0ede8; --muted:#a0a0ab;
-  --accent:#FFD700; --accent2:#3eb8ff; --accent3:#ff6b3e;
+  --accent:#b8ff3e; --accent2:#3eb8ff; --accent3:#ff6b3e;
   --fd:'Bebas Neue',sans-serif; --fb:'DM Sans',sans-serif; --fm:'DM Mono',monospace;
 }
 html { scroll-behavior:smooth; }
@@ -113,37 +113,65 @@ section { padding:5rem clamp(1.5rem,5vw,4rem); }
 }
 .gallery-img:hover { filter:brightness(1.1) saturate(1.1); }
 
-/* ── VIDEO THUMB OVERLAY ── */
-.vid-thumb {
-  position:relative; flex-shrink:0; scroll-snap-align:start;
-  cursor:pointer; overflow:hidden; display:block;
+/* VIDEO THUMBNAILS */
+.video-grid {
+  display:flex; gap:12px; overflow-x:auto; padding:1.25rem 1.5rem 1.5rem;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin; scrollbar-color:var(--border-hi) transparent;
+}
+.video-grid::-webkit-scrollbar { height:4px; }
+.video-grid::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+
+.video-thumb {
+  flex-shrink:0; scroll-snap-align:start;
+  width:320px; position:relative; cursor:pointer; user-select:none;
+  text-decoration:none; display:block;
   border:1px solid var(--border);
+  transition:border-color .2s, transform .2s;
 }
-.vid-thumb .gallery-img {
-  display:block; height:280px; width:auto; max-width:480px;
-  object-fit:cover; transition:filter .3s; border:none;
-}
-.vid-play-overlay {
-  position:absolute; inset:0; background:rgba(0,0,0,0);
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:10px;
-  transition:background .25s;
-}
-.vid-play-circle {
-  width:60px; height:60px; border-radius:50%;
-  background:rgba(255,107,62,0); border:2px solid rgba(255,255,255,0);
+.video-thumb:hover { border-color:var(--accent3); transform:translateY(-2px); }
+.video-thumb img { width:100%; height:180px; object-fit:cover; display:block; }
+.video-play-btn {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-60%);
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(255,107,62,.92);
   display:flex; align-items:center; justify-content:center;
-  transition:background .25s, border-color .25s, transform .25s;
+  transition:background .2s, transform .2s;
 }
-.vid-play-label {
-  font-family:var(--fm); font-size:11px; letter-spacing:0.12em;
-  text-transform:uppercase; color:rgba(255,255,255,0);
-  transition:color .25s;
+.video-thumb:hover .video-play-btn { background:var(--accent3); transform:translate(-50%,-60%) scale(1.1); }
+.video-play-btn svg { margin-left:4px; }
+.video-thumb-label {
+  padding:8px 10px;
+  font-family:var(--fm); font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--muted); background:var(--bg2);
+  display:flex; align-items:center; gap:6px;
 }
-.vid-thumb:hover .gallery-img { filter:brightness(.45) saturate(.8); }
-.vid-thumb:hover .vid-play-overlay { background:rgba(0,0,0,.15); }
-.vid-thumb:hover .vid-play-circle { background:rgba(255,107,62,.9); border-color:rgba(255,255,255,.3); transform:scale(1.08); }
-.vid-thumb:hover .vid-play-label { color:rgba(255,255,255,.85); }
+.video-thumb-label::before { content:'▶'; color:var(--accent3); font-size:9px; }
+
+/* VIDEO MODAL */
+.video-modal-overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,.9); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center;
+}
+.video-modal-overlay.open { display:flex; }
+.video-modal-box {
+  position:relative; width:min(900px,94vw);
+  aspect-ratio:16/9;
+  box-shadow:0 0 80px rgba(0,0,0,.8);
+  border:1px solid var(--border-hi);
+}
+.video-modal-box iframe {
+  width:100%; height:100%; border:none; display:block;
+}
+.video-modal-close {
+  position:absolute; top:-42px; right:0;
+  background:none; border:none; cursor:pointer;
+  color:var(--muted); font-size:28px; line-height:1;
+  transition:color .2s;
+}
+.video-modal-close:hover { color:var(--text); }
 
 /* VIDEO MODAL */
 .vm-overlay {
@@ -153,16 +181,25 @@ section { padding:5rem clamp(1.5rem,5vw,4rem); }
 }
 .vm-overlay.open { display:flex; }
 .vm-box {
-  position:relative; width:min(900px,96vw); aspect-ratio:16/9;
-  background:#000; box-shadow:0 0 0 1px rgba(255,255,255,.1),0 40px 80px rgba(0,0,0,.9);
+  position:relative; width:min(900px,96vw);
+  aspect-ratio:16/9; background:#000;
+  box-shadow:0 0 0 1px rgba(255,255,255,.1), 0 40px 80px rgba(0,0,0,.9);
 }
-.vm-box iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+.vm-box iframe {
+  position:absolute; inset:0; width:100%; height:100%; border:none;
+}
 .vm-close {
-  position:absolute; top:-42px; right:0; background:none; border:none;
-  cursor:pointer; color:rgba(255,255,255,.5); font-size:26px; line-height:1;
+  position:absolute; top:-42px; right:0;
+  background:none; border:none; cursor:pointer;
+  color:rgba(255,255,255,.5); font-size:26px; line-height:1;
   transition:color .2s; padding:4px 8px; font-family:var(--fm);
 }
 .vm-close:hover { color:#fff; }
+.vm-label {
+  position:absolute; bottom:-36px; left:0;
+  font-family:var(--fm); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:rgba(255,255,255,.3);
+}
 
 /* GAME COVERS GRID */
 .covers-row {
@@ -238,9 +275,6 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
 .reveal.visible { opacity:1; transform:none; }
 
 /* RESPONSIVE */
-@media(min-width:961px){
-  .hero-title { font-size:clamp(3rem,6vw,6rem); }
-}
 @media(max-width:960px){
   .hero{grid-template-columns:1fr;padding-top:96px;}
   .hero-visual{display:none;}
@@ -256,7 +290,7 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
   .nav-hamburger{display:block;}
   .capabilities-grid{grid-template-columns:1fr;}
   .stats-bar{grid-template-columns:repeat(2,1fr);}
-  .vid-thumb .gallery-img{height:200px;}
+  .gallery-img{height:200px;}
   .video-thumb{width:260px;}
   .video-thumb img{height:146px;}
 }
@@ -266,7 +300,7 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">Tom Jung</a>
+  <a href="#" class="nav-logo">Thomas Jung</a>
   <ul class="nav-links">
     <li><a href="#figma-ui">Figma UI</a></li>
     <li><a href="#ps-mlb">PS MLB</a></li>
@@ -291,7 +325,7 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
 <section class="hero">
   <div class="hero-content">
     <div class="hero-eyebrow">UI-Centric Art Director</div>
-    <h1 class="hero-title">TOM <span class="accent">JUNG</span></h1>
+    <h1 class="hero-title">THOMAS<br><span class="accent">JUNG</span></h1>
     <p class="hero-sub">14 shipped titles on PlayStation. Golf simulator UIs from Figma prototype to Unity 3D. Art direction where precision meets play.</p>
     <div class="hero-tags">
       <span class="tag">Figma UI / UX</span>
@@ -309,11 +343,11 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
   <div class="hero-visual">
     <div class="hero-img-wrap">
       <svg viewBox="0 0 560 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;opacity:.06">
-        <defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="#FFD700" stroke-width=".6"/></pattern></defs>
+        <defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="#b8ff3e" stroke-width=".6"/></pattern></defs>
         <rect width="100%" height="100%" fill="url(#g)"/>
       </svg>
       <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,12vw,9rem);color:#FFD700;opacity:.12;line-height:.85;letter-spacing:.02em;text-align:center;">UI ART<br>DIRECTOR</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,12vw,9rem);color:#b8ff3e;opacity:.12;line-height:.85;letter-spacing:.02em;text-align:center;">UI ART<br>DIRECTOR</div>
       </div>
       <div class="hero-img-badge"><strong>14</strong>Released Titles<br>Sony PlayStation</div>
     </div>
@@ -347,9 +381,13 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     <div class="portfolio-card-body">
       <p class="portfolio-card-desc">Complete game UI system for Full Swing Golf Simulator — designed in Figma with advanced interactive prototyping, implemented in Unity 3D under direct art direction.</p>
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('QZ52K6O9oco', 'FSG · Front End UI Demo')" title="FSG · Front End UI Demo">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_789f411704f44f4c80d907d041940ae8f000.jpg/v1/fill/w_880,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_789f411704f44f4c80d907d041940ae8f000.jpg" alt="FSG Main UI Design" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">FSG · Front End UI Demo</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_789f411704f44f4c80d907d041940ae8f000.jpg/v1/fill/w_880,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_789f411704f44f4c80d907d041940ae8f000.jpg" alt="FSG Main UI Design" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('QZ52K6O9oco', 'FSG · Front End UI Demo')">
+          <img src="https://img.youtube.com/vi/QZ52K6O9oco/hqdefault.jpg" alt="FSG · Front End UI Demo">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">FSG · Front End UI Demo</div>
         </div>
       </div>
     </div>
@@ -367,9 +405,13 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     <div class="portfolio-card-body">
       <p class="portfolio-card-desc">Real-time HUD and interactive game overlays for the Full Swing Golf simulator platform, designed in Figma and implemented in Unity 3D.</p>
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('8cL2mSivUDg', 'FSG · InGame UI Demo')" title="FSG · InGame UI Demo">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_7b6889f5537c48549841c98fabb06028f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7b6889f5537c48549841c98fabb06028f000.jpg" alt="FSG InGame UI" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">FSG · InGame UI Demo</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_7b6889f5537c48549841c98fabb06028f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7b6889f5537c48549841c98fabb06028f000.jpg" alt="FSG InGame UI" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('8cL2mSivUDg', 'FSG · InGame UI Demo')">
+          <img src="https://img.youtube.com/vi/8cL2mSivUDg/hqdefault.jpg" alt="FSG · InGame UI Demo">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">FSG · InGame UI Demo</div>
         </div>
       </div>
     </div>
@@ -387,9 +429,13 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     <div class="portfolio-card-body">
       <p class="portfolio-card-desc">Dedicated practice mode UI with advanced data visualization and drill-tracking interfaces.</p>
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('Ue0ZY2u6lpc', 'FSG · Practice Range UI Demo')" title="FSG · Practice Range UI Demo">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1bf6bb16f9b9492a8b0ff21a9bad6d80f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1bf6bb16f9b9492a8b0ff21a9bad6d80f000.jpg" alt="FSG Practice Range UI" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">FSG · Practice Range UI Demo</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1bf6bb16f9b9492a8b0ff21a9bad6d80f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1bf6bb16f9b9492a8b0ff21a9bad6d80f000.jpg" alt="FSG Practice Range UI" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('Ue0ZY2u6lpc', 'FSG · Practice Range UI Demo')">
+          <img src="https://img.youtube.com/vi/Ue0ZY2u6lpc/hqdefault.jpg" alt="FSG · Practice Range UI Demo">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">FSG · Practice Range UI Demo</div>
         </div>
       </div>
     </div>
@@ -407,9 +453,13 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     <div class="portfolio-card-body">
       <p class="portfolio-card-desc">Close to the Pin game mode UI — precision challenge interface with real-time shot data and scoring overlays.</p>
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('JoQlV8kI7PE', 'FSG · Close to the Pin UI Demo')" title="FSG · Close to the Pin UI Demo">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_6fcdf39df2b14623b8108b5007b1a3c9f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_6fcdf39df2b14623b8108b5007b1a3c9f000.jpg" alt="FSG CTP UI" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">FSG · Close to the Pin UI Demo</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_6fcdf39df2b14623b8108b5007b1a3c9f000.jpg/v1/fill/w_888,h_496,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_6fcdf39df2b14623b8108b5007b1a3c9f000.jpg" alt="FSG CTP UI" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('JoQlV8kI7PE', 'FSG · Close to the Pin UI Demo')">
+          <img src="https://img.youtube.com/vi/JoQlV8kI7PE/hqdefault.jpg" alt="FSG · Close to the Pin UI Demo">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">FSG · Close to the Pin UI Demo</div>
         </div>
       </div>
     </div>
@@ -445,7 +495,7 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
   <div class="section-label reveal">Sony PlayStation · Senior Lead UI Artist</div>
   <h2 class="section-title reveal">MLB THE SHOW</h2>
   <p class="reveal" style="font-size:15px;color:var(--muted);max-width:720px;line-height:1.8;margin-bottom:2.5rem;font-weight:300;">
-    For the most part of 16 years at SCEA (Sony Computer Entertainment of America — PlayStation Division), Tom worked as <strong style="color:var(--text);font-weight:400;">Senior Lead UI Artist (UI Art Director)</strong>. For the last 7 years of the MLB The Show franchise, he hired and managed 6 UI artists responsible for over 1,200 screens per year across PS3, PSVita, PSP, PS2, and Online platforms.
+    For the most part of 16 years at SCEA (Sony Computer Entertainment of America — PlayStation Division), Thomas worked as <strong style="color:var(--text);font-weight:400;">Senior Lead UI Artist (UI Art Director)</strong>. For the last 7 years of the MLB The Show franchise, he hired and managed 6 UI artists responsible for over 1,200 screens per year across PS3, PSVita, PSP, PS2, and Online platforms.
   </p>
 
   <!-- Game Covers -->
@@ -511,21 +561,31 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     <div class="portfolio-card-body">
       <p class="portfolio-card-desc">UI flow screen captures and video footage of the menu and game graphics for MLB 13. Click any thumbnail to watch on YouTube.</p>
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('oVDFY073fhM', 'MLB 13 · Front End Flow')" title="MLB 13 · Front End Flow">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg" alt="MLB 13 UI Screen 1" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 13 · Front End Flow</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg" alt="MLB 13 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg" alt="MLB 13 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg" alt="MLB 13 UI Screen 3" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg" alt="MLB 13 UI Screen 4" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('oVDFY073fhM', 'MLB 13 · Front End Flow')">
+          <img src="https://static.wixstatic.com/media/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c1ed13aa0f994694a8bf38a9342f686cf000.jpg" alt="MLB 13 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · UI Flow · Watch on YouTube</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('Ymuix8FKXg0', 'MLB 13 · Team Select → Game')" title="MLB 13 · Team Select → Game">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg" alt="MLB 13 UI Screen 2" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 13 · Team Select → Game</span></div>
+        <div class="video-thumb" onclick="openVideo('Ymuix8FKXg0', 'MLB 13 · Team Select → Game')">
+          <img src="https://static.wixstatic.com/media/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_b08facb210d647f582fa70ea04d9f4dbf000.jpg" alt="MLB 13 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · Front End Menu</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('63Mvv3iM_uk', 'MLB 13 · InGame Pause Menu')" title="MLB 13 · InGame Pause Menu">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg" alt="MLB 13 UI Screen 3" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 13 · InGame Pause Menu</span></div>
+        <div class="video-thumb" onclick="openVideo('63Mvv3iM_uk', 'MLB 13 · InGame Pause Menu')">
+          <img src="https://static.wixstatic.com/media/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8b0849d6364d412db22f668e56e39e7af000.jpg" alt="MLB 13 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · InGame OSD</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('nZs-d-oT_Ag', 'MLB 13 · InGame Pause Menu 2')" title="MLB 13 · InGame Pause Menu 2">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg" alt="MLB 13 UI Screen 4" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 13 · InGame Pause Menu 2</span></div>
+        <div class="video-thumb" onclick="openVideo('nZs-d-oT_Ag', 'MLB 13 · InGame Pause Menu 2')">
+          <img src="https://static.wixstatic.com/media/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_687b9d7871de441180a20fd3aa19e53ff000.jpg" alt="MLB 13 Video 4">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 13 · Gameplay UI</div>
         </div>
       </div>
     </div>
@@ -542,21 +602,31 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     </div>
     <div class="portfolio-card-body">
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('wl6fuLHXVxg', 'MLB 12 · FE Top Menu')" title="MLB 12 · FE Top Menu">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg" alt="MLB 12 UI Screen 1" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 12 · FE Top Menu</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg" alt="MLB 12 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg" alt="MLB 12 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg" alt="MLB 12 UI Screen 3" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg" alt="MLB 12 UI Screen 4" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('wl6fuLHXVxg', 'MLB 12 · FE Top Menu')">
+          <img src="https://static.wixstatic.com/media/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a858a5c683345d2b25f08dc80fbfbb5f000.jpg" alt="MLB 12 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · UI Flow</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('rV8-PMYnnTk', 'MLB 12 · Exhibition Select')" title="MLB 12 · Exhibition Select">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg" alt="MLB 12 UI Screen 2" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 12 · Exhibition Select</span></div>
+        <div class="video-thumb" onclick="openVideo('rV8-PMYnnTk', 'MLB 12 · Exhibition Select')">
+          <img src="https://static.wixstatic.com/media/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3ce753cd3c4844508acadc6499b180e7f000.jpg" alt="MLB 12 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · Front End</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('7Epz5MAADtI', 'MLB 12 · SD vs STL Intro')" title="MLB 12 · SD vs STL Intro">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg" alt="MLB 12 UI Screen 3" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 12 · SD vs STL Intro</span></div>
+        <div class="video-thumb" onclick="openVideo('7Epz5MAADtI', 'MLB 12 · SD vs STL Intro')">
+          <img src="https://static.wixstatic.com/media/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_ca644221404a4697986f2bfe4470cb01f000.jpg" alt="MLB 12 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · InGame OSD</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('0uIYY_NCktU', 'MLB 12 · Pause Menu')" title="MLB 12 · Pause Menu">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg" alt="MLB 12 UI Screen 4" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 12 · Pause Menu</span></div>
+        <div class="video-thumb" onclick="openVideo('0uIYY_NCktU', 'MLB 12 · Pause Menu')">
+          <img src="https://static.wixstatic.com/media/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_8d956898e70443cca111bf7b34c9cf15f000.jpg" alt="MLB 12 Video 4">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 12 · Gameplay UI</div>
         </div>
       </div>
     </div>
@@ -573,17 +643,25 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     </div>
     <div class="portfolio-card-body">
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('bPKxIiEXP9o', 'MLB 11 · Front End Flow')" title="MLB 11 · Front End Flow">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_65c06359e85849398ef2205fce815662f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_65c06359e85849398ef2205fce815662f000.jpg" alt="MLB 11 UI Screen 1" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 11 · Front End Flow</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_65c06359e85849398ef2205fce815662f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_65c06359e85849398ef2205fce815662f000.jpg" alt="MLB 11 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg" alt="MLB 11 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg" alt="MLB 11 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('bPKxIiEXP9o', 'MLB 11 · Front End Flow')">
+          <img src="https://static.wixstatic.com/media/a2afcf_65c06359e85849398ef2205fce815662f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_65c06359e85849398ef2205fce815662f000.jpg" alt="MLB 11 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 11 · UI Flow</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('Dm4CRKIKJUc', 'MLB 11 · Pause Menu Flow')" title="MLB 11 · Pause Menu Flow">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg" alt="MLB 11 UI Screen 2" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 11 · Pause Menu Flow</span></div>
+        <div class="video-thumb" onclick="openVideo('Dm4CRKIKJUc', 'MLB 11 · Pause Menu Flow')">
+          <img src="https://static.wixstatic.com/media/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3091a79aa5d34f928d3b3614aaced7f9f000.jpg" alt="MLB 11 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 11 · InGame OSD</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('7_7yroK3MZw', 'MLB 11 · Game Intro')" title="MLB 11 · Game Intro">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg" alt="MLB 11 UI Screen 3" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 11 · Game Intro</span></div>
+        <div class="video-thumb" onclick="openVideo('7_7yroK3MZw', 'MLB 11 · Game Intro')">
+          <img src="https://static.wixstatic.com/media/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_c11393bc599949f9acc58180601fc523f000.jpg" alt="MLB 11 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 11 · Gameplay UI</div>
         </div>
       </div>
     </div>
@@ -600,17 +678,25 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     </div>
     <div class="portfolio-card-body">
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('y6dUMkUHRn8', 'MLB 10 · Top Menu')" title="MLB 10 · Top Menu">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg" alt="MLB 10 UI Screen 1" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 10 · Top Menu</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg" alt="MLB 10 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg" alt="MLB 10 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg" alt="MLB 10 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('y6dUMkUHRn8', 'MLB 10 · Top Menu')">
+          <img src="https://static.wixstatic.com/media/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_1a1b979d39024e8eb47e62d71b22bcb5f000.jpg" alt="MLB 10 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 10 · UI Flow</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('IR_qOk7AfLg', 'MLB 10 · Pause Menu')" title="MLB 10 · Pause Menu">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg" alt="MLB 10 UI Screen 2" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 10 · Pause Menu</span></div>
+        <div class="video-thumb" onclick="openVideo('IR_qOk7AfLg', 'MLB 10 · Pause Menu')">
+          <img src="https://static.wixstatic.com/media/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_71d4389ae56347cc91c21debd1a82809f000.jpg" alt="MLB 10 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 10 · InGame OSD</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('-BYGlJ2-8V8', 'MLB 10 · SD vs NYY Intro')" title="MLB 10 · SD vs NYY Intro">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg" alt="MLB 10 UI Screen 3" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 10 · SD vs NYY Intro</span></div>
+        <div class="video-thumb" onclick="openVideo('-BYGlJ2-8V8', 'MLB 10 · SD vs NYY Intro')">
+          <img src="https://static.wixstatic.com/media/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_78720f4c51ea4cb6b697b3ae68299bd4f000.jpg" alt="MLB 10 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 10 · Gameplay UI</div>
         </div>
       </div>
     </div>
@@ -627,17 +713,25 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     </div>
     <div class="portfolio-card-body">
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('mhOIrAhZpAI', 'MLB 09 · FE Main Menu')" title="MLB 09 · FE Main Menu">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg" alt="MLB 09 UI Screen 1" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 09 · FE Main Menu</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg" alt="MLB 09 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg" alt="MLB 09 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg" alt="MLB 09 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('mhOIrAhZpAI', 'MLB 09 · FE Main Menu')">
+          <img src="https://static.wixstatic.com/media/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_9e54e0c60a304a44a0022eaa1f1af228f000.jpg" alt="MLB 09 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 09 · UI Flow</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('p8LulRkgT9Q', 'MLB 09 · Pause Menu Flow')" title="MLB 09 · Pause Menu Flow">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg" alt="MLB 09 UI Screen 2" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 09 · Pause Menu Flow</span></div>
+        <div class="video-thumb" onclick="openVideo('p8LulRkgT9Q', 'MLB 09 · Pause Menu Flow')">
+          <img src="https://static.wixstatic.com/media/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_4091e65864a14af294b989264c205e7bf000.jpg" alt="MLB 09 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 09 · InGame OSD</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('5pGZ63VsEFM', 'MLB 09 · Game Intro')" title="MLB 09 · Game Intro">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg" alt="MLB 09 UI Screen 3" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 09 · Game Intro</span></div>
+        <div class="video-thumb" onclick="openVideo('5pGZ63VsEFM', 'MLB 09 · Game Intro')">
+          <img src="https://static.wixstatic.com/media/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a2cb0af4f9de455493bae2575c291a89f000.jpg" alt="MLB 09 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 09 · Gameplay UI</div>
         </div>
       </div>
     </div>
@@ -654,21 +748,31 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     </div>
     <div class="portfolio-card-body">
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('ZpqQyr6aKa0', 'MLB 08 · Start Screen')" title="MLB 08 · Start Screen">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg" alt="MLB 08 UI Screen 1" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 08 · Start Screen</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg" alt="MLB 08 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg" alt="MLB 08 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg" alt="MLB 08 UI Screen 3" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg" alt="MLB 08 UI Screen 4" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('ZpqQyr6aKa0', 'MLB 08 · Start Screen')">
+          <img src="https://static.wixstatic.com/media/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_792b533145c946b6b91821fcc47299f3f000.jpg" alt="MLB 08 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · UI Flow</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('7IekgFciSwg', 'MLB 08 · FE Main Menu Flow')" title="MLB 08 · FE Main Menu Flow">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg" alt="MLB 08 UI Screen 2" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 08 · FE Main Menu Flow</span></div>
+        <div class="video-thumb" onclick="openVideo('7IekgFciSwg', 'MLB 08 · FE Main Menu Flow')">
+          <img src="https://static.wixstatic.com/media/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_45c851b85c4f4b1b9fb004c54d2fae95f000.jpg" alt="MLB 08 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · InGame OSD</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('Qc13RfTrPnA', 'MLB 08 · Pause Menu Flow')" title="MLB 08 · Pause Menu Flow">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg" alt="MLB 08 UI Screen 3" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 08 · Pause Menu Flow</span></div>
+        <div class="video-thumb" onclick="openVideo('Qc13RfTrPnA', 'MLB 08 · Pause Menu Flow')">
+          <img src="https://static.wixstatic.com/media/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_a9e2390ad1914260bbb475523acc3c2bf000.jpg" alt="MLB 08 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · Gameplay UI</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('Q5H58T1U-M0', 'MLB 08 · SD vs BOS')" title="MLB 08 · SD vs BOS">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg" alt="MLB 08 UI Screen 4" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 08 · SD vs BOS</span></div>
+        <div class="video-thumb" onclick="openVideo('Q5H58T1U-M0', 'MLB 08 · SD vs BOS')">
+          <img src="https://static.wixstatic.com/media/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_d0d3729351424d0fa2699a2ece9073cdf000.jpg" alt="MLB 08 Video 4">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 08 · Full Review</div>
         </div>
       </div>
     </div>
@@ -686,17 +790,25 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
     <div class="portfolio-card-body">
       <p class="portfolio-card-desc">PS3 was launched November 17, 2006 and MLB 07 was the first of the series to support the new platform — a landmark release for the franchise.</p>
       <div class="gallery-scroll">
-        <div class="vid-thumb" onclick="openVideo('tkaYhplhaIo', 'MLB 07 · Main Menu Flow')" title="MLB 07 · Main Menu Flow">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg" alt="MLB 07 UI Screen 1" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 07 · Main Menu Flow</span></div>
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg" alt="MLB 07 UI Screen 1" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg" alt="MLB 07 UI Screen 2" loading="lazy">
+        <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg" alt="MLB 07 UI Screen 3" loading="lazy">
+      </div>
+      <div class="video-grid">
+        <div class="video-thumb" onclick="openVideo('tkaYhplhaIo', 'MLB 07 · Main Menu Flow')">
+          <img src="https://static.wixstatic.com/media/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_3b5950ffd1224b3cb9b875072c9eaa6af000.jpg" alt="MLB 07 Video 1">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 07 · UI Flow · PS3 Launch</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('qCl91CeEwX8', 'MLB 07 · Pause Menu')" title="MLB 07 · Pause Menu">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg" alt="MLB 07 UI Screen 2" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 07 · Pause Menu</span></div>
+        <div class="video-thumb" onclick="openVideo('qCl91CeEwX8', 'MLB 07 · Pause Menu')">
+          <img src="https://static.wixstatic.com/media/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_62368c84cc1d4fcf9ec1fc798c7332c1f000.jpg" alt="MLB 07 Video 2">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 07 · InGame OSD</div>
         </div>
-        <div class="vid-thumb" onclick="openVideo('Ulc0wCneCKU', 'MLB 07 · SD vs LA Intro')" title="MLB 07 · SD vs LA Intro">
-          <img class="gallery-img" src="https://static.wixstatic.com/media/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg" alt="MLB 07 UI Screen 3" loading="lazy">
-          <div class="vid-play-overlay"><div class="vid-play-circle"><svg width="22" height="22" viewBox="0 0 22 22" fill="white"><polygon points="7,3 19,11 7,19"/></svg></div><span class="vid-play-label">MLB 07 · SD vs LA Intro</span></div>
+        <div class="video-thumb" onclick="openVideo('Ulc0wCneCKU', 'MLB 07 · SD vs LA Intro')">
+          <img src="https://static.wixstatic.com/media/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg/v1/fill/w_640,h_360,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_7dffaa7e4ad94dd2b7609785e89f75aef000.jpg" alt="MLB 07 Video 3">
+          <div class="video-play-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="white"><polygon points="5,2 16,9 5,16"/></svg></div>
+          <div class="video-thumb-label">MLB 07 · Gameplay UI</div>
         </div>
       </div>
     </div>
@@ -720,15 +832,15 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
 <!-- ABOUT -->
 <section id="about" style="background:var(--bg2);">
   <div class="section-label reveal">The Person Behind It</div>
-  <h2 class="section-title reveal" style="margin-bottom:1.25rem;">TOM <span style="color:var(--accent)">JUNG</span></h2>
+  <h2 class="section-title reveal" style="margin-bottom:1.25rem;">THOMAS JUNG</h2>
   <div class="about-layout reveal">
     <div>
       <div class="about-avatar">
-        <img src="https://static.wixstatic.com/media/a2afcf_35dc5ac235ac4ea9b94f6dd0b7d846c8~mv2.png/v1/fill/w_120,h_120,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_35dc5ac235ac4ea9b94f6dd0b7d846c8~mv2.png" alt="Tom Jung" onerror="this.style.opacity=0">
+        <img src="https://static.wixstatic.com/media/a2afcf_35dc5ac235ac4ea9b94f6dd0b7d846c8~mv2.png/v1/fill/w_120,h_120,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a2afcf_35dc5ac235ac4ea9b94f6dd0b7d846c8~mv2.png" alt="Thomas Jung" onerror="this.style.opacity=0">
       </div>
       <div class="about-role">UI-Centric Art Director · Art Manager · Senior UI Designer</div>
       <p class="about-bio">
-        Tom Jung is a <strong>UI-centric art director</strong> with a career defined by shipped product — 14 released titles on Sony PlayStation, full UI systems for golf simulators, and brand work across studios and agencies.
+        Thomas Jung is a <strong>UI-centric art director</strong> with a career defined by shipped product — 14 released titles on Sony PlayStation, full UI systems for golf simulators, and brand work across studios and agencies.
         <br><br>
         He bridges the gap between creative vision and technical execution: designing in Figma with advanced interactive prototyping, then guiding engineering teams through Unity 3D implementation with precision.
         <br><br>
@@ -755,7 +867,7 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
       </div>
       <div style="margin-top:1.5rem;padding:1.5rem;border:1px solid var(--border);background:var(--bg);">
         <div style="font-family:var(--fm);font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;">All work protected</div>
-        <div style="font-size:15px;color:var(--muted);line-height:1.7;">All images and videos © Tom Jung · All Rights Reserved.</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7;">All images and videos © Thomas Jung · All Rights Reserved. Figma interactive prototype links available upon request.</div>
       </div>
     </div>
   </div>
@@ -764,47 +876,71 @@ footer { padding:4rem clamp(1.5rem,5vw,4rem) 2.5rem; border-top:1px solid var(--
 <!-- FOOTER -->
 <footer>
   <div>
-    <div class="footer-brand">TOM <span>JUNG</span></div>
+    <div class="footer-brand">THOMAS <span>JUNG</span></div>
     <div class="footer-tagline">UI-Centric Art Direction · Game UI · Illustration · Brand Design</div>
   </div>
   <div class="footer-copy">
-    © 2024 Tom Jung · All Rights Reserved<br>
+    © 2024 Thomas Jung · All Rights Reserved<br>
     <a href="mailto:tom@phitee.com">tom@phitee.com</a> · <a href="tel:8587752557">858.775.2557</a>
   </div>
 </footer>
+
+
 
 <!-- VIDEO MODAL -->
 <div class="vm-overlay" id="vmOverlay">
   <div class="vm-box">
     <button class="vm-close" id="vmClose">&#10005;</button>
-    <iframe id="vmFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe id="vmFrame"
+      src=""
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin">
+    </iframe>
+    <div class="vm-label" id="vmLabel"></div>
   </div>
 </div>
 
 <script>
+  // Hamburger
   document.getElementById('hamburger').onclick = () => document.getElementById('mobileNav').classList.add('open');
   document.getElementById('navClose').onclick = closeMobileNav;
   function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
 
-  function toggleCard(id) { document.getElementById(id).classList.toggle('open'); }
+  // Accordion
+  function toggleCard(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
 
+  // Video modal — inline YouTube player
   const vmOverlay = document.getElementById('vmOverlay');
   const vmFrame   = document.getElementById('vmFrame');
+  const vmLabel   = document.getElementById('vmLabel');
 
   function openVideo(videoId, label) {
-    vmFrame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1';
+    vmFrame.src = 'https://www.youtube.com/embed/' + videoId
+      + '?autoplay=1&rel=0&modestbranding=1&color=white';
+    if (vmLabel) vmLabel.textContent = label || '';
     vmOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+
   function closeVideo() {
     vmOverlay.classList.remove('open');
     vmFrame.src = '';
     document.body.style.overflow = '';
   }
-  document.getElementById('vmClose').onclick = closeVideo;
-  vmOverlay.addEventListener('click', e => { if (e.target === vmOverlay) closeVideo(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVideo(); });
 
+  document.getElementById('vmClose').onclick = closeVideo;
+  vmOverlay.addEventListener('click', function(e) {
+    if (e.target === vmOverlay) closeVideo();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeVideo();
+  });
+
+  // Scroll reveal
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
       if (e.isIntersecting) {
